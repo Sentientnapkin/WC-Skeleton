@@ -12,7 +12,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.OuttakeTest;
+import frc.robot.commands.outtake.ChangeHoodAngleTEMP;
+import frc.robot.commands.outtake.DisableShooterTEMP;
+import frc.robot.commands.outtake.EnableShooterTEMP;
 import frc.robot.commands.auto.AutoForwardDistance;
 import frc.robot.commands.auto.AutoTurnAngle;
 import frc.robot.commands.drive.DriveTank;
@@ -74,10 +76,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
         // Once you have more subsystems, use this function to assign buttons to their activation
-      xboxA.whenPressed(new AutoForwardDistance(drivetrain, 2));
-      xboxX.whenPressed(new ResetEncoderValues(drivetrain));
-      xboxB.whenPressed(new AutoTurnAngle(drivetrain, 90));
-      xboxY.whenPressed(new OuttakeTest(outtake));
+      //xboxA.whenPressed(new AutoForwardDistance(drivetrain, 2));
+      //xboxX.whenPressed(new ResetEncoderValues(drivetrain));
+      //xboxB.whenPressed(new AutoTurnAngle(drivetrain, 90));
+      xboxY.whenPressed(new EnableShooterTEMP(outtake));
+      xboxX.whenPressed(new DisableShooterTEMP(outtake));
+      xboxB.whenPressed(new ChangeHoodAngleTEMP(outtake, -5.0));
+      xboxA.whenPressed(new ChangeHoodAngleTEMP(outtake, 5.0));
   }
 
 

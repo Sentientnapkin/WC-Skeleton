@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -24,37 +25,36 @@ public class OuttakeSubsystem extends SubsystemBase {
     public boolean shooterRunning = false;
     private double currentFrontShooterPower = 0.0;
     private double currentBackShooterPower = 0.0;
-    private double currentHoodAngle = 30.0;
+    private double currentHoodAngle = 10.0;
 
 
     public OuttakeSubsystem() {
         hoodAngleEncoder.reset();
-        hoodAngleEncoder.setDistancePerRotation(62*Math.PI*48/50);
+        hoodAngleEncoder.setDistancePerRotation(360*48/50.0);
 
         shooterMotorFront.setInverted(true);
         shooterMotorBack.setInverted(false);
-        hoodAngleMotor.setInverted(true);
+        hoodAngleMotor.setInverted(false);
 
-        hoodAnglePID = new PIDController(0.003, 0 ,0.001);
+        hoodAnglePID = new PIDController(0.0075, 0.04 ,0);
         frontShooterPID = new PIDController(0, 0 ,0);
         backShooterPID = new PIDController(0, 0 ,0);
 
-        hoodAnglePID.setSetpoint(30.0);
+        hoodAnglePID.setSetpoint(10.0);
     }
 
-     void setShooterPower(double power) { // Enables both wheels
+     public void setShooterPower(double power) { // Enables both wheels
         setShooterFront(power);
         setShooterBack(power);
         shooterRunning = true;
     }
 
-    public void setShooterFront(double power) { // Enables front wheels
-        if (power>1.0 || power<0.0) return; currentFrontShooterPower = power;
+    private void setShooterFront(double power) { // Enables front wheels
+        shooterMotorFront.set(ControlMode.PercentOutput, power);
     }
 
-    public void setShooterBack(double power) { // Enables back wheels
+    private void setShooterBack(double power) { // Enables back wheels
         shooterMotorBack.set(ControlMode.PercentOutput, power);
-        shooterRunning = true;
     }
 
     public void stopShooter() { // Disables shooter
@@ -64,7 +64,9 @@ public class OuttakeSubsystem extends SubsystemBase {
 
     public void setHoodAngle(double angle) { if (angle>45.0 || angle<10.0) return; this.currentHoodAngle = angle; hoodAnglePID.setSetpoint(angle); }
 
-    public double getHoodAngle() { return hoodAngleEncoder.getDistance(); } //RADIANS
+    public double getHoodAngle() { return Math.abs(hoodAngleEncoder.getDistance() - 256.0); } //DEGREES
+
+    public double getTargetedHoodAngle() { return currentHoodAngle; }
 
     public void disable() {
         stopShooter();
@@ -74,9 +76,11 @@ public class OuttakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("hoodAngle", getHoodAngle());
+
         if (shooterRunning) {
             double power = hoodAnglePID.calculate(getHoodAngle());
-            hoodAngleMotor.set(power);
+            hoodAngleMotor.set(power > 0.31 ? 0.3 : power);
         }
     }
 }
