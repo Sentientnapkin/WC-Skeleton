@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -16,7 +17,7 @@ public class OuttakeSubsystem extends SubsystemBase {
     private final TalonFX shooterMotorBack = new TalonFX(8);
     private final CANSparkMax hoodAngleMotor = new CANSparkMax(11, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    private final DutyCycleEncoder hoodAngleEncoder = new DutyCycleEncoder(9);
+    private final Encoder hoodAngleEncoder = new Encoder(8, 9);
 
     PIDController hoodAnglePID;
     PIDController frontShooterPID;
@@ -25,22 +26,22 @@ public class OuttakeSubsystem extends SubsystemBase {
     public boolean shooterRunning = false;
     private double currentFrontShooterPower = 0.0;
     private double currentBackShooterPower = 0.0;
-    private double currentHoodAngle = 10.0;
+    private double currentHoodAngle = 30.0;
 
 
     public OuttakeSubsystem() {
         hoodAngleEncoder.reset();
-        hoodAngleEncoder.setDistancePerRotation(360*48/50.0);
+        hoodAngleEncoder.setDistancePerPulse((360*50/48.0)/2048);
 
         shooterMotorFront.setInverted(true);
         shooterMotorBack.setInverted(false);
         hoodAngleMotor.setInverted(false);
 
-        hoodAnglePID = new PIDController(0.0075, 0.04 ,0);
+        hoodAnglePID = new PIDController(0.02, 0.0009 ,0.002);
         frontShooterPID = new PIDController(0, 0 ,0);
         backShooterPID = new PIDController(0, 0 ,0);
 
-        hoodAnglePID.setSetpoint(10.0);
+        hoodAnglePID.setSetpoint(30.0);
     }
 
      public void setShooterPower(double power) { // Enables both wheels
@@ -64,7 +65,7 @@ public class OuttakeSubsystem extends SubsystemBase {
 
     public void setHoodAngle(double angle) { if (angle>45.0 || angle<10.0) return; this.currentHoodAngle = angle; hoodAnglePID.setSetpoint(angle); }
 
-    public double getHoodAngle() { return Math.abs(hoodAngleEncoder.getDistance() - 256.0); } //DEGREES
+    public double getHoodAngle() { return Math.abs(9+hoodAngleEncoder.getDistance()); } //DEGREES
 
     public double getTargetedHoodAngle() { return currentHoodAngle; }
 
@@ -80,7 +81,7 @@ public class OuttakeSubsystem extends SubsystemBase {
 
         if (shooterRunning) {
             double power = hoodAnglePID.calculate(getHoodAngle());
-            hoodAngleMotor.set(power > 0.31 ? 0.3 : power);
+            hoodAngleMotor.set(power);
         }
     }
 }
