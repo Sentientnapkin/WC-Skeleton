@@ -81,8 +81,12 @@ public class RobotContainer {
       //xboxB.whenPressed(new AutoTurnAngle(drivetrain, 90));
       xboxY.whenPressed(new EnableShooterTEMP(outtake));
       xboxX.whenPressed(new DisableShooterTEMP(outtake));
-      xboxB.whenPressed(new ChangeHoodAngleTEMP(outtake, -5.0));
-      xboxA.whenPressed(new ChangeHoodAngleTEMP(outtake, 5.0));
+      xboxB.whenPressed(new ChangeHoodAngleTEMP(outtake, 5.0), false);
+      xboxA.whenPressed(new ChangeHoodAngleTEMP(outtake, -5.0), false);
+  }
+
+  public void disableAll() {
+      outtake.disable();
   }
 
 

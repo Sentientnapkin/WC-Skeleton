@@ -37,7 +37,7 @@ public class OuttakeSubsystem extends SubsystemBase {
         shooterMotorBack.setInverted(false);
         hoodAngleMotor.setInverted(false);
 
-        hoodAnglePID = new PIDController(0.02, 0.0009 ,0.002);
+        hoodAnglePID = new PIDController(0.035, 0.12,0.001);
         frontShooterPID = new PIDController(0, 0 ,0);
         backShooterPID = new PIDController(0, 0 ,0);
 
@@ -63,7 +63,7 @@ public class OuttakeSubsystem extends SubsystemBase {
         shooterRunning = false;
     }
 
-    public void setHoodAngle(double angle) { if (angle>45.0 || angle<10.0) return; this.currentHoodAngle = angle; hoodAnglePID.setSetpoint(angle); }
+    public void setHoodAngle(double angle) { if (angle<=45.0 && angle>=10.0) { this.currentHoodAngle = angle; hoodAnglePID.setSetpoint(angle); }}
 
     public double getHoodAngle() { return Math.abs(9+hoodAngleEncoder.getDistance()); } //DEGREES
 
@@ -71,6 +71,7 @@ public class OuttakeSubsystem extends SubsystemBase {
 
     public void disable() {
         stopShooter();
+        hoodAnglePID.reset();
         //stopHood();
         //stopTurret();
     }
@@ -78,6 +79,7 @@ public class OuttakeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("hoodAngle", getHoodAngle());
+        SmartDashboard.putNumber("targeted hoodAngle", currentHoodAngle);
 
         if (shooterRunning) {
             double power = hoodAnglePID.calculate(getHoodAngle());
