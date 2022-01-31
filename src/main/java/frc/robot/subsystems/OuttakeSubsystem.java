@@ -47,7 +47,7 @@ public class OuttakeSubsystem extends SubsystemBase {
 
      public void setShooterPower(double power) { // Enables both wheels
         if (power<=1.0 && power>=0.0) {
-            //setShooterFront(power);
+            setShooterFront(power);
             setShooterBack(power);
             shooterRunning = true;
         }
