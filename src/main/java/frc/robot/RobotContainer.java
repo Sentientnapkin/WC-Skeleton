@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.outtake.ChangeHoodAngleTEMP;
+import frc.robot.commands.outtake.ChangeShooterPowerTEMP;
 import frc.robot.commands.outtake.DisableShooterTEMP;
 import frc.robot.commands.outtake.EnableShooterTEMP;
 import frc.robot.commands.auto.AutoForwardDistance;
@@ -81,8 +82,14 @@ public class RobotContainer {
       //xboxB.whenPressed(new AutoTurnAngle(drivetrain, 90));
       xboxY.whenPressed(new EnableShooterTEMP(outtake));
       xboxX.whenPressed(new DisableShooterTEMP(outtake));
-      xboxB.whenPressed(new ChangeHoodAngleTEMP(outtake, -5.0));
-      xboxA.whenPressed(new ChangeHoodAngleTEMP(outtake, 5.0));
+      xboxB.whenPressed(new ChangeHoodAngleTEMP(outtake, 5.0), false);
+      xboxA.whenPressed(new ChangeHoodAngleTEMP(outtake, -5.0), false);
+      xboxRB.whenPressed(new ChangeShooterPowerTEMP(outtake, 0.1));
+      xboxLB.whenPressed(new ChangeShooterPowerTEMP(outtake, -0.1));
+  }
+
+  public void disableAll() {
+      outtake.disable();
   }
 
 

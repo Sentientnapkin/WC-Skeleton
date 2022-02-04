@@ -15,7 +15,7 @@ public class DisableShooterTEMP extends CommandBase {
     @Override
     public void initialize() {
         outtakeSubsystem.setShooterPower(0.0);
-        outtakeSubsystem.setHoodAngle(15.0);
+        outtakeSubsystem.setHoodAngle(20);
     }
 
     @Override

@@ -4,18 +4,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.OuttakeSubsystem;
 
 
-public class ChangeHoodAngleTEMP extends CommandBase {
+public class ChangeShooterPowerTEMP extends CommandBase {
     private final OuttakeSubsystem outtakeSubsystem;
-    double angleToChangeBy;
+    private final double powerToChangeBy;
 
-    public ChangeHoodAngleTEMP(OuttakeSubsystem outtakeSubsystem, double angleToChangeBy) {
+    public ChangeShooterPowerTEMP(OuttakeSubsystem outtakeSubsystem, double powerToChangeBy) {
         this.outtakeSubsystem = outtakeSubsystem;
-        this.angleToChangeBy = angleToChangeBy;
+        this.powerToChangeBy = powerToChangeBy;
         addRequirements(this.outtakeSubsystem);
     }
 
     @Override
-    public void initialize() { outtakeSubsystem.setHoodAngle(outtakeSubsystem.getTargetedHoodAngle() + angleToChangeBy); }
+    public void initialize() { outtakeSubsystem.setShooterPower(outtakeSubsystem.getFrontShooterPower() + powerToChangeBy); }
 
     @Override
     public boolean isFinished() { return true; }

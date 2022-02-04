@@ -13,7 +13,7 @@ public class EnableShooterTEMP extends CommandBase {
     }
 
     @Override
-    public void initialize() { outtakeSubsystem.setShooterPower(0.3); }
+    public void initialize() { outtakeSubsystem.setShooterPower(0.1); }
 
     @Override
     public boolean isFinished() { return true; }
