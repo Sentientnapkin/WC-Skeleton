@@ -15,7 +15,7 @@ public class ChangeHoodAngleTEMP extends CommandBase {
     }
 
     @Override
-    public void initialize() { outtakeSubsystem.setHoodAngle(outtakeSubsystem.getTargetedHoodAngle() + angleToChangeBy); }
+    public void initialize() { /*outtakeSubsystem.setHoodAngle(outtakeSubsystem.getTargetedHoodAngle() + angleToChangeBy);*/ }
 
     @Override
     public boolean isFinished() { return true; }
